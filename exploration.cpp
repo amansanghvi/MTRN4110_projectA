@@ -25,6 +25,7 @@ num get_next_row(num row, Direction curr_dir, int side);
 num get_next_col(num row, Direction curr_dir, int side);
 Side get_priority_side(int priority);
 
+// Size = 26*9*9 = 2106kB
 Node Map[NUM_COLS][NUM_COLS];
 int orientation = UNDETERMINED;
 
@@ -43,9 +44,8 @@ int main() {
     while(!is_centre_found()) { // Exploration
         curr_node = get_node(pos);
         Node next_node;
-        int i;
         Side next_side = Side::NONE;
-        for (i = 0; i < NUM_SIDES; i++) { 
+        for (int i = 0; i < NUM_SIDES; i++) { 
             // Explores sides near current position.
             // Gets FRONT, RIGHT, LEFT then BACK. 
             // Chooses the first node that's "SEEN", otherwise will go to a node that is visited but has potential paths
@@ -109,7 +109,6 @@ int main() {
     
     // The centre is found now we need to get there.
     print_everything();
-    print_map(orientation);
     
     Coord centre; 
     if (orientation) {
@@ -140,6 +139,11 @@ int main() {
         drive_forward();
         pos = path[i];
     }
+    curr_node = get_node(centre);
+    if (curr_node->value == SEEN) {
+        add_node(centre, direction);
+    }
+    print_map(orientation);
     cout << "GOT TO: " << *get_node(pos) << " DONE!" << endl;
     return EXIT_SUCCESS;
 }
@@ -609,7 +613,19 @@ bool wall_exists(int side) {
             case (int)Side::BACK:
                 return false;
         }
+    case 15:
+        switch (side) {
+            case (int)Side::FRONT:
+                return true;
+            case (int)Side::RIGHT:
+                return true;
+            case (int)Side::LEFT:
+                return false;
+            case (int)Side::BACK:
+                return false;
+        }
     }
+
     return false;
 }
 

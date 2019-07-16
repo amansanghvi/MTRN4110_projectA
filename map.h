@@ -20,17 +20,17 @@
 
 typedef int16_t num;
 
-struct Coord {
+struct __attribute__ ((packed))  Coord {
     num row;
     num col;
 };
 
-struct Edge {
+struct __attribute__ ((packed)) Edge {
     Coord dest;
     bool visited;
 };
 
-struct Node {
+struct __attribute__ ((packed)) Node {
     num value;
     num row;
     num col;
